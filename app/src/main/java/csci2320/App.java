@@ -13,16 +13,22 @@ import java.util.Random;
 public class App {
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
-            long seed = sc.nextLong();
-            Random rand = new Random(seed);
-            int size = sc.nextInt();
-            String type = sc.next();
-            switch(type) {
+            String testType = sc.next();
+            if (testType.equals("speed")) {
+                speed(100000);
+                return;
+            }
+            Random rand = new Random(sc.nextLong());
+            int size1 = sc.nextInt();
+            int size2 = sc.nextInt();
+            switch(testType) {
                 case "basic":
-                    basicTest(rand, size);
+                    basicTest(rand, size1);
+                    basicTest(rand, size2);
                     break;
                 case "mst":
-                    mstTest(rand, size, sc.nextDouble());
+                    mstTest(rand, size1, sc.nextDouble());
+                    mstTest(rand, size2, sc.nextDouble());
                     break;
             }
         }
@@ -71,6 +77,16 @@ public class App {
             cnt += 1;
             weightSum += edge.weight();
         }
-        System.out.printf("%d %1.4f", cnt, weightSum);
+        System.out.printf("%d %1.4f\n", cnt, weightSum);
+    }
+
+    static void speed(int size) {
+        var start = System.nanoTime();
+        Random rand = new Random(48283);
+
+        basicTest(rand, size);
+        System.out.println("Basic time: " + (System.nanoTime() - start)*1e-9);
+        mstTest(rand, size / 10, 0.8);
+        System.out.println("Final time: " + (System.nanoTime() - start)*1e-9);
     }
 }
